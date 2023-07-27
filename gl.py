@@ -155,14 +155,14 @@ class Renderer(object):
         if (v1[1] < v2[1]):
             v1, v2 = v2, v1
         
-        """ if (v1[1] == v2[1]):
+        if (v1[1] == v2[1]):
             self.paintFlatBottomTri(v0, v1, v2)
         elif (v0[1] == v1[1]):
             self.paintFlatTopTri(v0, v1, v2)
         else:
             v3 = [v0[0] + ((v1[1] - v0[1]) / (v2[1] - v0[1])) * (v2[0] - v0[0]), v1[1]]
             self.paintFlatBottomTri(v0, v1, v3)
-            self.paintFlatTopTri(v1, v3, v2) """
+            self.paintFlatTopTri(v1, v3, v2)
 
         self.glLine(v0, v1, clr or self.currColor)
         self.glLine(v1, v2, clr or self.currColor)
