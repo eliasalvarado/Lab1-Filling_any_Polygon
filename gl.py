@@ -1,8 +1,6 @@
 from struct import pack
 from collections import namedtuple
 from math import cos, sin
-from obj import Obj
-from npPirata import multMM
 
 V2 = namedtuple('Point1', ['x', 'y'])
 V3 = namedtuple('Point2', ['x', 'y', 'z'])
@@ -121,7 +119,51 @@ class Renderer(object):
                 limit += 1
 
 
+    def paintFlatBottomTri(self, v0, v1, v2):
+        try:
+            m1 = (v1[0] - v0[0]) / (v1[1] - v0[1])
+            m2 = (v2[0] - v0[0]) / (v2[1] - v0[1])
+        except:
+            pass
+        else:
+            x0, x1 = v1[0], v2[0]
+
+            for y in range(v1[1], v0[1]):
+                self.glLine((x0, y), (x1, y))
+                x0 += m1
+                x1 += m2
+    
+    def paintFlatTopTri(self, v0, v1, v2):
+        try:
+            m1 = (v2[0] - v0[0]) / (v2[1] - v0[1])
+            m2 = (v2[0] - v1[0]) / (v2[1] - v1[1])
+        except:
+            pass
+        else:
+            x0, x1 = v0[0], v1[0]
+
+            for y in range(v0[1], v2[1], -1):
+                self.glLine((x0, y), (x1, y))
+                x0 -= m1
+                x1 -= m2
+
     def glTriangle(self, v0, v1, v2, clr = None):
+        if (v0[1] < v1[1]):
+            v0, v1, = v1, v0
+        if (v0[1] < v2[1]):
+            v0, v2 = v2, v0
+        if (v1[1] < v2[1]):
+            v1, v2 = v2, v1
+        
+        """ if (v1[1] == v2[1]):
+            self.paintFlatBottomTri(v0, v1, v2)
+        elif (v0[1] == v1[1]):
+            self.paintFlatTopTri(v0, v1, v2)
+        else:
+            v3 = [v0[0] + ((v1[1] - v0[1]) / (v2[1] - v0[1])) * (v2[0] - v0[0]), v1[1]]
+            self.paintFlatBottomTri(v0, v1, v3)
+            self.paintFlatTopTri(v1, v3, v2) """
+
         self.glLine(v0, v1, clr or self.currColor)
         self.glLine(v1, v2, clr or self.currColor)
         self.glLine(v2, v0, clr or self.currColor)
